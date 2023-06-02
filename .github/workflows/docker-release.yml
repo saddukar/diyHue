@@ -60,7 +60,7 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
       - name: Download container artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ci-${{ matrix.arch }}-${{ github.run_number }}.tar
 
@@ -105,14 +105,14 @@ jobs:
 
       - name: Docker login
         run: |
-         if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
+            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
           fi
 
       - name: Download container artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ci-${{ matrix.arch }}-${{ github.run_number }}.tar
 
@@ -163,7 +163,7 @@ jobs:
           fi
 
       - name: Download container artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ci-${{ matrix.arch }}-${{ github.run_number }}.tar
 
@@ -229,9 +229,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
+            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
           fi
 
       - name: Deploy Commit ID
@@ -341,7 +341,7 @@ jobs:
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
+            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
           fi
 
       - name: Commit ID

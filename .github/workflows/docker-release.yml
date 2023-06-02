@@ -106,9 +106,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-           winpty docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
           fi
 
       - name: Download container artifact
@@ -157,9 +157,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
           fi
 
       - name: Download container artifact
@@ -229,9 +229,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
           fi
 
       - name: Deploy Commit ID
@@ -339,9 +339,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
           fi
 
       - name: Commit ID

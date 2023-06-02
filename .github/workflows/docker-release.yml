@@ -20,7 +20,7 @@ jobs:
             arch_friendly: armv6
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Enable qemu
         run: |
@@ -42,7 +42,7 @@ jobs:
           docker save --output output.tar diyhue/diyhue:ci
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ci-${{ matrix.arch_friendly }}-${{ github.run_number }}.tar
           path: output.tar
@@ -77,7 +77,7 @@ jobs:
 
       - name: Cleanup
         run: |
-          docker kill diyhue
+          docker stop diyhue
           docker rm diyhue
 
   publish:
@@ -106,9 +106,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
           fi
 
       - name: Download container artifact
@@ -159,7 +159,7 @@ jobs:
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ${{ matrix.registry }} --username ${{ secrets.CR_USER }} --password-stdin
           fi
 
       - name: Download container artifact
@@ -229,9 +229,9 @@ jobs:
       - name: Docker login
         run: |
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
           fi
 
       - name: Deploy Commit ID
@@ -341,7 +341,7 @@ jobs:
           if [ ${{ matrix.registry }} == "registry.hub.docker.com" ]; then
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           else
-          echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
+            echo "${{ secrets.CR_PAT }}" | docker login ${{ matrix.registry }} -u "${{ secrets.CR_USER }}" --password-stdin
           fi
 
       - name: Commit ID
@@ -387,6 +387,6 @@ jobs:
       matrix:
         arch: [amd64, armv7, arm64, armv6]
     steps:
-    - uses: geekyeggo/delete-artifact@v1
+    - uses: geekyeggo/delete-artifact@v2
       with:
         name: ci-${{ matrix.arch }}-${{ github.run_number }}.tar

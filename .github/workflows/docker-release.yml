@@ -77,7 +77,7 @@ jobs:
 
       - name: Cleanup
         run: |
-          docker kill diyhue
+          docker stop diyhue
           docker rm diyhue
 
   publish:
